@@ -1,7 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your Oh My Zsh installation.
+# Path to your Oh My Zsh installation.Export means create a $PATH.
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -65,28 +65,45 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+autoload -Uz vcs_info
+precmd() { vcs_info }
+zstyle ':vcs_info:git:*' formats ' %F{227}(%b)%f'
+setopt PROMPT_SUBST
+
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+if [ -f "$ZSH/oh-my-zsh.sh" ]; then
+    plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+    source $ZSH/oh-my-zsh.sh
+    PROMPT='%B%F{208}%~%f${vcs_info_msg_0_} %F{39}==>%f%b '
+    eval "$(fasd --init auto)"
+    alias vim="nvim"
+else 
+    PLUGIN_DIR="$HOME/.zsh_plugins"
+    [ -f "$PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    [ -f "$PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    PROMPT='%B%F{208}%~%f${vcs_info_msg_0_} %F{39}remote=>%f%b '
+fi
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
-
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
@@ -103,8 +120,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source /home/wei/.config/broot/launcher/bash/br
-alias vim='nvim'
+[ -f "$HOME/.config/broot/launcher/bash/br" ] && source "$HOME/.config/broot/launcher/bash/br"
+
 alias ll="ls -lah"
 alias mv="mv -i"
 alias cfg="vim ~/.zshrc"
@@ -112,13 +129,7 @@ alias exe="chmod +x"
 alias ucfg="source ~/.zshrc"
 alias fd="fdfind"
 alias dc="cd"
-eval "$(fasd --init auto)"
-PROMPT='%B%F{208}%~%f %F{39}==>%f%b '
 
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-if [[ $PWD =~ "/mnt/" ]]; then
-  zstyle ':vcs_info:*' enable false
-fi
 
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20

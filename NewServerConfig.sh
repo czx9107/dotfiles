@@ -1,7 +1,7 @@
 #!/bin/bash
 
 apt-get update
-apt-get install -y zsh git stow
+apt-get install -y zsh git stow vim
 
 USER="wei"
 PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM4mRina55ndyjFgdphpIp01lk1daal3kWf7+jp0FM9S wei@PUS"
@@ -34,6 +34,7 @@ chown -R $USER:$USER $ZSH_DIR
 sudo -u $USER bash <<EOF
 cd /home/$USER
 git clone https://github.com/czx9107/dotfiles $DOTFILES_DIR
+mkdir ./.config
 cd $DOTFILES_DIR
 
 rm -f /home/$USER/.zshrc
@@ -49,4 +50,4 @@ sed -i 's/^#PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 systemctl restart ssh
 
-echo "Setup complete!"
+echo "Setup complete! You can now login as '$USER'."

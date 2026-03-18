@@ -4,7 +4,7 @@ apt-get update
 apt-get install -y zsh git stow
 
 USER="wei"
-PUBLIC_KEY=""
+PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM4mRina55ndyjFgdphpIp01lk1daal3kWf7+jp0FM9S wei@PUS"
 ZSH_DIR="/home/$USER/.zsh_plugins"
 DOTFILES_DIR="config"
 
